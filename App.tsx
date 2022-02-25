@@ -66,6 +66,21 @@ const App = () => {
         return unsubscribe;
     }, []);
 
+    useEffect(() => {
+        const unsubscribe = messaging().onTokenRefresh(async (token) => {
+            console.log(`New FCM token: ${token}`);
+        });
+
+        return unsubscribe;
+    }, []);
+
+    useEffect(() => {
+        (async function () {
+            const token = await messaging().getToken();
+            console.log(`Initial FCM token: ${token}`);
+        })();
+    }, []);
+
     return (
         <SafeAreaView style={backgroundStyle}>
             <StatusBar barStyle={isDarkMode ? "light-content" : "dark-content"} />
