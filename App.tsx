@@ -8,8 +8,10 @@
  * @format
  */
 
-import React from "react";
+import React, { useEffect } from "react";
 import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, useColorScheme, View } from "react-native";
+
+import messaging from "@react-native-firebase/messaging";
 
 import {
     Colors,
@@ -55,6 +57,14 @@ const App = () => {
     const backgroundStyle = {
         backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
     };
+
+    useEffect(() => {
+        const unsubscribe = messaging().onMessage(async (remoteMessage) => {
+            console.log("A new FCM message arrived!", JSON.stringify(remoteMessage));
+        });
+
+        return unsubscribe;
+    }, []);
 
     return (
         <SafeAreaView style={backgroundStyle}>
