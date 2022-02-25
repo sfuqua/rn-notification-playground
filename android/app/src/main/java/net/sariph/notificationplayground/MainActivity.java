@@ -1,4 +1,4 @@
-package com.notificationplayground;
+package net.sariph.notificationplayground;
 
 import com.facebook.react.ReactActivity;
 
