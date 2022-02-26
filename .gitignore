@@ -28,6 +28,7 @@ build/
 .gradle
 local.properties
 google-services.json
+firebase-adminsdk.json
 *.iml
 *.hprof
 
