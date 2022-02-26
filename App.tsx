@@ -8,8 +8,19 @@
  * @format
  */
 
-import React, { useEffect } from "react";
-import { SafeAreaView, ScrollView, StatusBar, StyleSheet, Text, useColorScheme, View } from "react-native";
+import React, { useCallback, useEffect, useState } from "react";
+import {
+    Button,
+    Clipboard,
+    SafeAreaView,
+    ScrollView,
+    StatusBar,
+    StyleSheet,
+    Text,
+    TextInput,
+    useColorScheme,
+    View,
+} from "react-native";
 
 import messaging from "@react-native-firebase/messaging";
 
@@ -58,6 +69,8 @@ const App = () => {
         backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
     };
 
+    const [fcmToken, setFcmToken] = useState<string | null>(null);
+
     useEffect(() => {
         const unsubscribe = messaging().onMessage(async (remoteMessage) => {
             console.log("A new FCM message arrived!", JSON.stringify(remoteMessage));
@@ -69,6 +82,7 @@ const App = () => {
     useEffect(() => {
         const unsubscribe = messaging().onTokenRefresh(async (token) => {
             console.log(`New FCM token: ${token}`);
+            setFcmToken(token);
         });
 
         return unsubscribe;
@@ -78,8 +92,15 @@ const App = () => {
         (async function () {
             const token = await messaging().getToken();
             console.log(`Initial FCM token: ${token}`);
+            setFcmToken(token);
         })();
     }, []);
+
+    const onCopyTokenPress = useCallback(() => {
+        if (fcmToken) {
+            Clipboard.setString(fcmToken);
+        }
+    }, [fcmToken]);
 
     return (
         <SafeAreaView style={backgroundStyle}>
@@ -91,6 +112,15 @@ const App = () => {
                         backgroundColor: isDarkMode ? Colors.black : Colors.white,
                     }}
                 >
+                    <Text style={styles.sectionDescription}>FCM Token:</Text>
+                    <TextInput
+                        style={{ flex: 1 }}
+                        value={fcmToken ?? undefined}
+                        placeholder="FCM token will go here"
+                        multiline={true}
+                    />
+                    <Button title="Copy token" disabled={!fcmToken} onPress={onCopyTokenPress} />
+
                     <Section title="Step One">
                         Edit <Text style={styles.highlight}>App.tsx</Text> to change this screen and then come back to
                         see your edits.
