@@ -1,4 +1,4 @@
-// npx ts-node scripts/test-notif.ts
+// npx ts-node -- scripts/test-notif.ts <FCM token>
 
 import admin from "firebase-admin";
 
@@ -10,7 +10,12 @@ if (!token) {
     throw new Error("No Firebase token specified as arg");
 }
 
-async function sendNotification(title = "Test title", body = "Test body") {
+/**
+ * Dispatches a "display message" - an FCM message with a notification body.
+ * @param title The title of the display message
+ * @param body The body of the display message
+ */
+export async function sendNotification(title = "Test title", body = "Test body") {
     const result = await admin.messaging().sendToDevice([token], {
         notification: {
             title,
@@ -22,7 +27,10 @@ async function sendNotification(title = "Test title", body = "Test body") {
     console.log(`Result: ${JSON.stringify(result)}`);
 }
 
-async function sendData() {
+/**
+ * Dispatches a "data-only message".
+ */
+export async function sendData() {
     const result = await admin.messaging().sendToDevice(
         [token],
         {
@@ -36,6 +44,7 @@ async function sendData() {
     console.log(`Result: ${JSON.stringify(result)}`);
 }
 
+// Initialize the Firebase connection and send a message
 (async function () {
     await admin.initializeApp({
         credential: admin.credential.cert(serviceAccountJson),
