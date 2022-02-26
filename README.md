@@ -22,12 +22,6 @@ To get to this "minimal" state for tinkering, I've done the following (on Feb 25
    **NOTE**: My google-services.json is _not_ committed to this repo, you will need to create your own
 6. Configure linting/formatting to my preferences instead of using the template's defaults
 7. Integrate `@react-native-firebase/messaging` onMessage and setBackgroundMessageHandler callbacks as described in [the docs](https://rnfirebase.io/messaging/usage), with `console.log` impls to just note any calls we receive from the framework.
+8. Using `AndroidManifest.xml` merging (see android/app/src/main/AndroidManifest.xml), override the default react-native-firebase `FirebaseMessagingService` with our custom implementation `SariphFirebaseMessagingService` that tampers with `handleIntent`
 
-## TODO
-
-These are things I will intend to do to make this a useful project:
-
-1. Add more robust logging
-2. See if I can override `ReactNativeFirebaseMessagingService` and hook into `handleIntent`; failing that, try the same for `ReactNativeFirebaseMessagingReceiver` and document my findings on behavior
-3. Test `FirebaseMessagingService` and the `BroadcastReceiver` behavior with the full matrix of notification types ("notification" vs "data only") and app states (foreground, background, not running/suspended)
-4. If necessary, fork the Android Firebase SDK and attempt a private build with changes as described in comments on [this issue](https://github.com/firebase/firebase-android-sdk/issues/2639) in order to validate Android OS vs. SDK behavior when the app receives a "display message" while the app is backgrounded
+For testing, I have been using `ts-node` with the Firebase admin SDK - see the `scripts/` folder.
