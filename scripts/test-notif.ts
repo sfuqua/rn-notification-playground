@@ -15,6 +15,7 @@ async function sendNotification(title = "Test title", body = "Test body") {
         notification: {
             title,
             body,
+            clickAction: "TEST",
         },
     });
 
@@ -41,5 +42,5 @@ async function sendData() {
     });
 
     await sendNotification();
-    await sendData();
+    // await sendData();
 })();
